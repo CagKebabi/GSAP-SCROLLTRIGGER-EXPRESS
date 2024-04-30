@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            position:relative;
+            box-sizing:border-box;
+        }
+        body {
+            margin:0;
+            padding:0;
+            font-size:1.6em;
+            overflow-x:hidden;
+            font-family:Kanit, sans-serif;
+            background:dodgerblue;
+        }
+
+        .fullscreen {
+            width:100vw;
+            height:100vh;
+            padding:5vw;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            font-size:8vw;
+            color:white;
+        }
+
+        .nav {
+            top:0;
+            width:100vw;
+            padding:20px;
+            position:fixed;
+            background:#00BFFF;
+            display:flex;
+            align-items:center;
+            flex-wrap:wrap;
+            height:100px;
+        }
+
+
+        a {
+            margin-right:20px;
+            text-decoration:none;
+            color:black;
+            display:inline-block;
+            font-size:clamp(14px, 3vw, 30px);
+        }
+    </style>
+</head>
+<body>
+    <div class="fullscreen">DODGER BLUE</div>
+    <div class="fullscreen">SALMON</div>
+    <div class="fullscreen">GREEN</div>
+    <div class="fullscreen">PURPLE</div>
+    <div class="fullscreen">MAROON</div>
+    <div class="nav">
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Blog</a>
+        <a href="#">Shop</a>
+        <a href="#">Contact Us</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script>
+        const sectionColors = ["dodgerblue", "salmon", "green",   "purple",    "maroon"]
+        const navColors =     ["#00BFFF",    "#FFA07A", "#90EE90", "#EE82EE", "#FF6347"]
+
+        //Her bir .fulscreen elementine sırasıyla sectionColors taki renkleri uyguladık.
+        gsap.set(".fullscreen", {backgroundColor:gsap.utils.wrap(sectionColors)})
+        //.fulscreen elementlerini bir arraya atadık 
+        const sections = gsap.utils.toArray(".fullscreen")
+        //sections arrayini döngüye aldık
+        sections.forEach(function(section, index){
+            console.log(section, navColors[index])
+            //Bize döngüden gelen her elemente scrollTrigger ekledik
+            ScrollTrigger.create({
+                trigger:section,
+                start:"top 100px", //Rengini değiştirmek istediğimiz .nav elementi 100px olduğu için 100px yukarıda animasyonu başlattık
+                end:"bottom 100px",
+                animation:gsap.to(".nav", {backgroundColor:navColors[index], immediateRender:false}), //Animasyonumuzu yazdık fakat immediateRender:false olmadan çalıştırırsak animasyonu oynatırken başta varsayılan renk olan maviyi bir süreliğine görürüz bu sorunu ortadan kaldırmak için kullanmamız şart
+                toggleActions:"restart none none reverse",
+                preventOverlaps:true //Bu özellik, ScrollTrigger bir animasyonu tetiklemek üzereyken etkinleşir; önceki scrollTrigger tabanlı animasyonları bulur ve bu önceki animasyonları son durumlarına zorlayarak çirkin örtüşmeleri önler. true ise, tam tersine önceki tüm ScrollTrigger'ları etkileyecektir.
+            })
+        })
+
+        //Bu derste kullanılan gsap.utils.wrap() ve immediateRender konuları GSAP BEYOND BASICS derslerinde öğretilmiştir.
+        //gsap.utils.wrap() - https://www.creativecodingclub.com/courses/take/gsap3-beyond-the-basics/texts/16202053-gsap-utils-wrap
+        //immediateRender - https://www.creativecodingclub.com/courses/take/gsap3-beyond-the-basics/lessons/23262160-understanding-gsap-s-immediaterender-property
+    </script>
+</body>
+</html>
