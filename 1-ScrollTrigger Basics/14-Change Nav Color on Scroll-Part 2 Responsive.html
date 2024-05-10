@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            position:relative;
+            box-sizing:border-box;
+        }
+        body {
+            margin:0;
+            padding:0;
+            font-size:1.6em;
+            overflow-x:hidden;
+            font-family:Kanit, sans-serif;
+            background:dodgerblue;
+        }
+
+        .fullscreen {
+            width:100vw;
+            height:100vh;
+            padding:5vw;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            font-size:8vw;
+            color:white;
+        }
+
+        .nav {
+            top:0;
+            width:100vw;
+            padding:20px;
+            position:fixed;
+            background:#00BFFF;
+            display:flex;
+            align-items:center;
+            flex-wrap:wrap;
+            /*height: 100px;*/
+        }
+
+
+        a {
+            margin-right:20px;
+            text-decoration:none;
+            color:black;
+            display:inline-block;
+            font-size:1.7em;
+        }
+    </style>
+</head>
+<body>
+    <div class="fullscreen">DODGER BLUE</div>
+    <div class="fullscreen">SALMON</div>
+    <div class="fullscreen">GREEN</div>
+    <div class="fullscreen">PURPLE</div>
+    <div class="fullscreen">MAROON</div>
+    <div class="nav">
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Blog</a>
+        <a href="#">Shop</a>
+        <a href="#">Contact Us</a>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script>
+        //Bu derste de bir önceki dersimizde işlediğimiz örnek üzerinden devam edeceğiz.
+
+        //Bir önceki derste nav ımıza css ile 100px lik sabit height değeri vermiştik.ScrollTriggera da yükseklik değerimiz sabit
+        //Olduğu için start ve end e 100px lik değeri girmiştik.Fakat sabit bir yükseklik ile animasyonumuzu responsive olarak ayarlayamayız
+        //Ekran genişliği küçüldüğünde yazılar alt alta binebilir ve navın yüksekliğini artması veya azalmasını isteyebiliriz.
+        //Bu sorunumuzu halletmek için start ve end parametrelerine nasıl dinamik veri gireceğimizi öğreneceğiz.
+
+        //Öncelikle .nav elementimizden 100px lik height değerini kaldırıyoruz ve a etiketlerinin font size ını 1.7em yapıyoruz.
+        //Bu css değişikliklerini önceki örnekte yaparsak .nav ın yüksekliğinin arttığını ve dolayısıyla animasyonun istediğimiz
+        //gibi çalışmadığını görebiliriz. 
+
+        //Bir önceki derste ki örenğimizde css değişikliklerini yapar ve start ve end deki 100px değerini 
+        //document.querySelector(".nav").offsetHeight olarak değiştirirsek animasyonumuz olması gerektiği gibi çalışır.
+        //start:"top" + document.querySelector(".nav").offsetHeight, end:"bottom" + document.querySelector(".nav").offsetHeight,
+        //Fakat tarayıcı genişiliği kullanıcı tarafından değiştirilirse yine .nav yükseklik değeri sayfa açıldığı zamankinden
+        //farklı olduğunda aynı sorunu yaşayacağız işte bu yüzden function based values kullanacağız.
+
+        //Yani scrollTrigger her çalıştığında .nav yüksekliğiğni alacağız böylece tarayıcı genişliği değiştiğinde de 
+        //.nav yüksekliği değişirse .nav ın güncel yüksekliğini almış olacağız.
+        //start:() => "top" + document.querySelector(".nav").offsetHeight, //start ve end de de işlem {} içierisine alınırsa çalışmıyor.
+        //end:() => "bottom" + document.querySelector(".nav").offsetHeight, //start ve end de de işlem {} içierisine alınırsa çalışmıyor.
+        //Böylece sorunumuzu halletmiş olduk. Öncelikle css de değişiklik yaptık ve start ve enddeki value ları function based value ile değiştirdik.
+        //Function based value sayesinde scrollTrigger her çalıştığında .nav ın yüksekliğini alıyoruz.
+
+        //Sorunumuzu hallettik fakat örenği bu derste öğreneceğimiz bonuslar ile biraz daha geliştirelim.
+        //start ve end e eklediğimiz document.querySelector(".nav").offsetHeight değerini forEach in hemen üstünde bir değişkene
+        //atayıp Bu değişkeni ScrollTriggera "refreshInit" eventListener i ekleyerek ekran boyutu her değiştiğinde değişkenimizdeki
+        //veriyi güncelleyebiliriz."refreshInit" sadece GSAP ile ScrollTriggera eklenebilen bir özelliktir.GSAP ile scrollTriggera
+        //eklenebilen diğer özellikler için bağlantıdaki dökümana bakılabilir. https://gsap.com/docs/v3/Plugins/ScrollTrigger/static.addEventListener()/
+        
+        const sectionColors = ["dodgerblue", "salmon", "green",   "purple",    "maroon"]
+        const navColors =     ["#00BFFF",    "#FFA07A", "#90EE90", "#EE82EE", "#FF6347"]
+
+        //apply sectionColors to each .fullscreen element
+        gsap.set(".fullscreen", {backgroundColor:gsap.utils.wrap(sectionColors)})
+
+        const sections = gsap.utils.toArray(".fullscreen")
+        let navHeight 
+        sections.forEach(function(section, index){
+            console.log(section, navColors[index])
+            ScrollTrigger.create({
+                trigger:section,
+                start:() => "top " + navHeight,
+                end:() => "bottom "  + navHeight,
+                // animation:gsap.to(".nav", {
+                //     backgroundColor:navColors[index], 
+                //     immediateRender:false}),
+                // toggleActions:"restart none none reverse",
+
+                //Ayrıca toggleActions ve immediateRender:false kullanmak yerine farklı bir alternatif olarak aşağıdaki örneği kullanabiliriz.
+                onEnter: ()=> gsap.to(".nav", {backgroundColor:navColors[index]}),
+                onEnterBack: ()=> gsap.to(".nav", {backgroundColor:navColors[index]}),
+                PreventOverlaps:true //ÇOK hızlı kaydırmanın gezinme ekranının doğru renge dönüşmemesine neden olabileceği görülüyor. Bunu düzeltmek için yine PreventOverlaps:true ekledik. 
+            })
+        })
+
+        ScrollTrigger.addEventListener("refreshInit", function() {
+            navHeight = document.querySelector(".nav").offsetHeight;
+        });
+    </script>
+</body>
+</html>
