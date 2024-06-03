@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        position: relative;
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        font-size: 1.6em;
+        overflow-x: hidden;
+        font-family: Kanit, sans-serif;
+      }
+
+      .fullscreen {
+        width: 100vw;
+        height: 100vh;
+        padding: 5vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 8vw;
+        color: dodgerblue;
+        background-color: white;
+        border-bottom: 1px solid #333;
+      }
+
+      .small {
+        height: 25vh;
+      }
+
+      ul {
+        top: 0;
+        position: fixed;
+        margin: 0;
+        list-style: none;
+      }
+
+      li {
+        color: white;
+        opacity: 0.5;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="fullscreen one">one</div>
+    <div class="fullscreen two">two</div>
+    <div class="fullscreen three">three</div>
+    <div class="fullscreen four">four</div>
+    <ul class="nav">
+      <li>one</li>
+      <li>two</li>
+      <li>three</li>
+      <li>four</li>
+    </ul>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script>
+      //Bu derste scroll u kaydırdıkça ilgili bölümlere geldiğimizde öğeleri nasıl etkinleştireceğimizi öğreneceğiz.
+      //ScrollTriggerı iyi bilmiyorsak bu basit görünen animasyonun biraz zor olması şaşırtıcı.
+
+      //Çözüme ulaşırken bu zorlukları aşmamızın 4 farklı yolunu öğreneceğiz.
+      //Aşağıdaki 4 syntax varyasyonu her zaman işimizi hafifletecektir.
+      //ScrollTrigger toggle animasyonu oluşturmanın 4 farklı yolu;
+      //1-Standart toggleAction
+      //2-Koşullu animasyonlarla onToggle
+      //3-Tek bir animasyon ve koşullu value lar ile onToggle
+      //4-onToggle Tween Toggle
+
+      //1-classic toggleActions
+
+      ScrollTrigger.create({
+        trigger: ".fullscreen.one",
+        start: "top 50%",
+        end: "bottom 50%",
+        markers: true,
+        animation: gsap.to(".fullscreen.one", { backgroundColor: "black" }),
+        toggleActions: "play reverse play reverse",
+      });
+
+      //ScrollTrigger ın isActive stateine bağlı olarak koşullu animasyon oluşturma ve onToggle ile animasyonu yapılandırma.
+      //onToggle, scsrollTrigger etkin ve etkin etkin değil arasında geçiş yaptığında etkinleşir
+      //2-Koşullu animasyonlarla onToggle
+      ScrollTrigger.create({
+        trigger: ".fullscreen.two",
+        start: "top 50%",
+        end: "bottom 50%",
+        markers: true,
+        onToggle: (self) => {
+          //self.isActive ile scrollTriggerın aktif çalışıyor olup olmadığını görebiliriz.
+          console.log(self.isActive);
+          if (self.isActive) {
+            gsap.to(".fullscreen.two", { backgroundColor: "black" });
+          } else {
+            gsap.to(".fullscreen.two", { backgroundColor: "white" });
+          }
+        },
+      });
+
+      //Koşullu value lar ile bir animasyon oluşturma
+      //3-Tek bir animasyon ve koşullu value lar ile onToggle
+      ScrollTrigger.create({
+        trigger: ".fullscreen.three",
+        start: "top 50%",
+        end: "bottom 50%",
+        markers: true,
+        onToggle: (self) => {
+          gsap.to(".fullscreen.three", {
+            backgroundColor: self.isActive ? "black" : "white",
+          });
+        },
+      });
+
+      //4-onToggle Tween Toggle
+      ScrollTrigger.create({
+        trigger: ".four",
+        start: "top 50%",
+        end: "bottom 50%",
+        markers: true,
+        animation: gsap.to(".four", { background: "black" }),
+        onToggle: (self) => {
+          //Burada isActive true olduğunda reversed(false) yapmak istedik
+          //reversed(false) olduğu zaman animasyon ileri oynar
+          //reversed() ile animasyonumuzun toggleActions daki gibi reverse değerini set ederiz
+          self.animation.reversed(!self.isActive);
+        },
+      });
+
+      //navs animation
+      const sections = gsap.utils.toArray(".fullscreen");
+
+      sections.forEach(function (section, index) {
+        ScrollTrigger.create({
+          trigger: section,
+          start: "top center",
+          end: "bottom center",
+          markers: false,
+          animation: gsap.to(`li:nth-child(${index + 1})`, {
+            duration: 0.2,
+            opacity: 1,
+            color: "aqua",
+          }),
+          //if ScrollTrigger isActive = true then play the animation forward via reversed(false)
+          onToggle: (self) => {
+            self.animation.reversed(!self.isActive);
+          },
+        });
+      });
+    </script>
+  </body>
+</html>
