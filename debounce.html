@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+        background: #444444;
+        color: white;
+        font: 15px/1.51 Helvetica, sans-serif;
+        margin:0 auto;
+        }
+        .leftPanel,
+        .rightPanel {  
+        padding:2%;
+        margin:0;
+        width:46%;
+        float:left;
+        min-height:100vh;
+        text-align:center;
+        }
+
+        .leftPanel {
+        background: #ccc;
+        color:black;
+        }
+    </style>
+</head>
+<body>
+    <div class="leftPanel">Resize events<br></div>
+    <div class="rightPanel">Debounced events<br></div>
+    <script>
+        const leftPanel = document.querySelector(".leftPanel")
+        const rightPanel = document.querySelector(".rightPanel")
+
+        function debounce(func) {
+            var timer;
+            return function (event) {
+            if (timer) clearTimeout(timer); 
+                timer = setTimeout(func,300) 
+            }
+        }
+
+        window.addEventListener("resize", debounce(function() { 
+            console.log("window resized");
+        }))
+    </script>
+</body>
+</html>

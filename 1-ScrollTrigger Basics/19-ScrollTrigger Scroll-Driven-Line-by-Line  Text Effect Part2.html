@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@200;400;600&display=swap');
+
+        * {
+            position:relative;
+            box-sizing:border-box;
+        }
+
+        body {
+            margin:0;
+            padding:0;
+            font-size:1.6em;
+            overflow-x:hidden;
+            font-family:Kanit, sans-serif;
+        }
+
+        .content {
+            padding:5vw;
+            font-size:8vw;
+        }
+
+        .fullscreen {
+            width:100vw;
+            height:100vh;
+            color:white;
+            background:#01125C;
+        }
+
+        .dark {
+            background:#020202;
+        }
+
+        .centered {
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        h3 {
+            font-weight:200;
+            font-size:clamp(28px, 6vw, 42px);
+            color:#EC407A;
+        }
+
+        .wrapper {
+            overflow:hidden;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="wrapper">
+        <div class="content fullscreen centered">Scroll Down</div>
+        <div class="content centerered dark">
+            <h3 class="toSplit">ScrollTrigger uses all kinds of techniques to maximize performance like throttling updates, pre-calculating intersection points to minimize effort during scroll, leveraging transforms, layerizing elements to utilize the GPU.</h3>
+        </div>
+        
+        <div class="content fullscreen centered">Scroll More</div>
+        <div class="content centerered dark">
+            <h3 class="toSplit">ScrollTrigger uses all kinds of techniques to maximize performance like throttling updates, pre-calculating intersection points to minimize effort during scroll, leveraging transforms, layerizing elements to utilize the GPU.</h3>
+            <h3 class="toSplit">Entering or leaving a ScrollTrigger area can make an animation play, pause, resume, reverse, restart, or complete...or you can make the scrollbar can act like a scrubber!</h3>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://assets.codepen.io/16327/SplitText3.min.js"></script>
+    <script>
+        //Bu derste bir önceki dersteki örneğin aynısını responsive hale getireceğiz.
+
+        //Örneğimizi responsive duyarlı yapabilmek için;
+        //revert() ile tüm SplitText objelerini başlangıç durumlarına getireceğiz.revert() timelineları geri döndürür ve onu öldürür 
+        //yani ortadan kaldırır; timeline tarafından eklenen satır içi stillerin kaldırılması da dahil olmak üzere hedefleri animasyon 
+        //öncesi durumlarına döndürür. splitLinesTrigger.revert() yazarsak neler olduğunu devtoolsta görebiliriz.Bunu yaptığımızda 
+        //elementler eski varsayılan durumlarına döner.Fakat bizim bu örnekte oluşturduğumuz ilk splitTextimiz 
+        //splitLine ondan sonra splitLinesTrigger ı oluşturduk ilk oluşturulan splitLines a splitLines.revert() uygularsak
+        //hem splitLines hem de splitLinesTrigger lar silinir. splitLinesTrigger a revert() uygularsak sadece splitLinesTrigger silinir
+        //Daha iyi anlaşılması için tarayıcı konsoluna splitLinesTrigger.revert() ve splitLines.revert() yazarak elementlere
+        //neler olduğunu inceleyebiliriz.
+
+        //kill() ile tüm ScrollTrigger uygulanan elementlere ulaşıp scrollTriggerlarını kaldıracağız.
+
+        //Sonrasında kullanıcı ekranı resize etmeyi durdurduğunda init() fonkiyonumuzu yeniden çalıştıracağız.
+
+        function init() {
+            splitLines = new SplitText(".toSplit", {type: "lines", linesClass:"line"}); 
+            splitLinesTrigger = new SplitText(".toSplit", {type: "lines", linesClass:"lineTrigger"});
+            splitLines.lines.forEach((line, index) =>{
+                ScrollTrigger.create({
+                trigger:splitLinesTrigger.lines[index],
+                //markers:true, 
+                start:"top 95%",
+                animation:gsap.from(line, {duration:1, y:200, opacity:0}),
+                toggleActions:"restart none none reverse"   
+                })                            
+            })
+        }
+
+        function killAll() {
+            splitLines.revert() //Oluşturulan bütün splitText leri ortadan kaldırdık.
+            //ScrollTrigger için killAll() metodu kullanılamıyor bu yüzden getAll() ile bütün scrollTrigger uygulanan elementlere
+            //ulaştık ve foreach içerisinde tüm elementlere tek tek kill() metodu uyguladık böylece hepsindeki scrollTriggerı kaldırmış
+            //olduk
+            ScrollTrigger.getAll().forEach((trigger) => { 
+                trigger.kill()
+            })
+            init() //Tekrar init fonksiyonumuzu çalıştırarak elementlerimize splitTex ve ScrollTriggerları yeniden oluşturduk
+        }
+
+        //call the killAll() function on a debounced window resize event.
+        //resize event will fire many times outputting the window resize
+        //debounced event will wait until the window is done being resized
+        //deobunce kütüphanelerini kullanmak yerine aşağıdaki gibi kendimiiz debounce eventi oluşturabiliriz.
+
+        function debounce(func) {
+            var timer;
+            return function (event) {
+                if (timer) clearTimeout(timer); //window resize olduğu süre boyunca timer ı yani setTimeout u çalıştırmayacak
+                timer = setTimeout(func,300) //window resize ı bittiğinde bu kısmı çalıştıracak. 
+            }
+        }
+
+        window.addEventListener("resize", debounce(function(e) { //debounce fonksiyonumuz parametre alıyordu bu parametreyi fonksiyon olarak kullanıp içerisinde killAll() fonksiyonumuzu kullanıcaz
+            console.log("end of resizing");
+            killAll() //özel yazdığımız debounce fonksiyonu ile killAll() fonksiyonumuzu çalıştırdık debounce fonksiyonu sayesinde killAll() sadece window resize ı tamamlandığında çalışacaktır
+        }))
+
+        window.addEventListener('load', (event) => {
+            init();
+        });
+
+        //https://css-tricks.com/debouncing-throttling-explained-examples/
+    </script>
+</body>
+</html>
