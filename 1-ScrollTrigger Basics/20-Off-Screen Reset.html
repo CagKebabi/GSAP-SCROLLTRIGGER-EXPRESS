@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            font-size: 1.4em;
+            line-height:1.5em;
+            margin:1em;
+        }
+
+        h1, h4 {
+            margin:0;
+            text-align:center;
+        }
+
+        h4 {
+            color:#555;
+        }
+
+        .space {
+            height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+        .quote {
+            margin:2em;
+            color:#323232;
+            background: #e3f2fd;
+            padding: 2em;
+            border-radius: 1em;
+            line-spacing: 1.3em;
+            box-shadow: 2px 4px 8px rgb(0, 0, 0, 0.3);
+        }
+
+        .quote p {
+            margin:0;
+        }
+
+        .quote span {
+            display:block;
+            margin-top:1em;
+
+            font-size:0.8em;
+            font-weight: bold;
+        }
+
+        .cite {
+            font-size:0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="space" style="height:80vh;">
+        <div>
+        <h1>Scroll Down</h1>
+        <h4>toggleActions</h4>
+            </div>
+    </div>
+    </div>
+    
+    <p>Fishing is a great way to spend time in the outdoors and can be enjoyed by people of all ages. Fishing is a skill that takes time to learn and master, but with some basic instruction anyone can learn to fish. </p>
+    
+    <p>The first step in learning to fish is to get the right gear. Different types of fishing require different types of equipment, so it’s important to make sure you’ve got the right supplies. Reels, rods, bait, lures, and other fishing accessories should all be chosen according to the type of fish you’re looking to catch. </p>
+    
+    <div class="quoteWrapper">
+        <div class="quote">
+            <p>“There is a fine line between fishing and just standing on the shore like an idiot.”</p>
+            <span>Steven Wright</span>
+        </div>
+    </div>
+    <p>Once you’ve got the right gear, it’s time to hit the water. Before you cast your line, make sure you’ve chosen the right spot. Look for deeper areas where the fish may be hiding and pay attention to the type of bait they’re attracted to. Once you’ve found the perfect spot, cast your line and wait. It’s important to be patient and wait for the right bite. When you feel a tug on the line, it’s time to reel in your catch. </p>
+    
+    <p>Fishing is a great way to relax and enjoy the outdoors. </p>
+    
+    <p class="cite">Author: Artifical Intelligence via ChatGPT<br>
+        Prompt: <a href="https://beta.openai.com/playground/p/XU4Y56TKEA8rQytCh4Pto4Cy?model=text-davinci-003" target="_blank">Write 3 Paragraphs on How To Fish</a>
+    </p>
+    <div class="space"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script>
+        //off-screen reset aşağıdakileri işlemek için iki ayrı ScrollTrigger kullanmayı içeren bir tekniktir:
+        //1.Öğe görünüm alanına girdiğinde bir animasyon çalıştırılıyor.
+        //2.Öğe görünüm alanının tamamen dışında olduğunda animasyonu başlangıç ​​durumuna sıfırlıyoruz.
+
+        //Bunu yapmak istememizin sebebi animasyonumuzu öğenin altına gelince başlatmak istiyoruz fakat geri sarmak için
+        //öğenin üstüne denk gelince yapmak istiyoruz. 2 tane scrollTrigger oluşturmamızın sebebi budur.Birisinde animasyonu başlatırız
+        //Diğerinde istediğimiz noktaya gelince geri sararız. Bir bakıma toggleactionslarımızın parametrelerini yazmış olduk
+
+        //ScrollTrigger'ı kendi projelerimde daha fazla kullandıkça bunun paha biçilmez bir teknik olduğunu keşfettim. 
+        //Nasıl çalıştığını tam olarak anlamanız için pratik yapmak faydalı olacaktır.
+
+        //toggleActions ile Reset
+        // ScrollTrigger.create({
+        //     trigger:".quoteWrapper",
+        //     start:"bottom 95%",
+        //     animation:gsap.from(".quote", {opacity:0, scale:0.5}),
+        //     toggleActions:"restart none none reverse"
+        // })
+
+        //off-screen reset
+        gsap.set(".quote", {opacity:0, scale:0.5})
+
+        ScrollTrigger.create({
+            trigger:".quoteWrapper",
+            start:"bottom 95%",
+            onEnter: ()=> gsap.to(".quote", {opacity:1, scale:1})
+        })
+
+        ScrollTrigger.create({
+            trigger:".quoteWrapper",
+            start:"top 100%",
+            onLeaveBack: ()=> {
+                console.log("onLeaveBack")
+                gsap.set(".quote", {opacity:0, scale:0.5})
+            }
+        })
+
+        //Toggle Actions Eventleriyle ilgili bir demo
+        //https://codepen.io/cassie-codes/pen/xxqgdbr
+    </script>
+</body>
+</html>
