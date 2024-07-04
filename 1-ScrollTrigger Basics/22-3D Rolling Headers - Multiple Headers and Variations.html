@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            position:relative;
+        }
+
+        :root {
+        --headerSize: clamp(60px, 10vw, 100px);
+        --headerActiveBG:#444;
+        --headerActiveText:white;
+        --headerOffBG:#ddd;
+        --headerOffText:#aaa;
+        }
+
+        body {
+            margin:0;
+            font-family:sans-serif;
+        }
+
+        h1 {
+            text-align:center;
+            margin:0;
+            padding-top:50px;
+        }
+
+        .wrapper {
+            width:clamp(340px, 80%, 800px);
+            margin:auto;
+        }
+        .space {
+            height:100vh;
+        }
+
+        p {
+            margin:20px 0 20px 0;
+            font-size:clamp(18px, 1.8vw, 30px);
+            line-height:1.6em;
+        }
+
+        .heading-3d-wrapper{
+            height:var(--headingSize);
+            width:100%;
+            margin-top:8vw;
+            
+        }
+
+        .heading-3d {
+            margin:0;
+            transform-origin:50% 50% calc(var(--headerSize)/-2);
+            height:var(--headerSize);
+            transform-style:preserve-3d;
+        }
+
+        .heading-3d div {
+            width:100%;
+            position:absolute;
+            height:var(--headerSize);
+            text-align:center;
+        }
+
+        .heading-3d div h2 {
+            text-transform:uppercase;
+            font-size:calc(var(--headerSize)/2);
+            line-height:var(--headerSize);
+            margin:0;
+            padding:0;
+        }
+
+        .heading-3d div:nth-child(1){
+            transform-origin:50% 100%;
+            transform:translateY(-100%) rotateX(90deg);
+            background:var(--headerOffBG);
+            color:var(--headerOffText);
+
+        }
+
+        .heading-3d div:nth-child(2){
+            background:var(--headerActiveBG);
+            color:var(--headerActiveText);
+        }
+
+        .heading-3d div:nth-child(3){
+            transform-origin:0 0;
+            transform:translateY(100%) rotateX(-90deg);
+            background:var(--headerOffBG);
+            color:var(--headerOffText);
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <h1>3D Roll onEnter / onLeave / onEnterBack / onLeaveBack</h1>
+    <div class="space"></div>
+    <div class="heading-3d-wrapper">
+        <div class="heading-3d">
+        <div><h2>Performance</h2></div>
+        <div><h2>Performance</h2></div>
+        <div><h2>Performance</h2></div>
+    </div>
+    </div>
+    <p>ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. e est. Mauris placerat eleifend Mauris placerat eleifend leo.</p><p>morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+        <p>malesuada fames ac turpis egestas. e est. Mauris placerat eleifend. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat</p>
+        <p>e est. Mauris placerat eleifend libero sit amet quam egestas semper. Aenean e est. Mauris placerat eleifend ultricies mi vitae est. Mauris placerat eleifendante. Donec eu  leo.</p>
+    <div class="heading-3d-wrapper">
+    <div class="heading-3d">
+        <div><h2>Engine</h2></div>
+        <div><h2>Engine</h2></div>
+        <div><h2>Engine</h2></div>
+    </div>
+    </div>
+    <p>tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend </p>
+    <p>Pellentesque habitant morbi tristique senectusec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+    
+    <div class="heading-3d-wrapper">
+    <div class="heading-3d">
+        <div><h2>Interior</h2></div>
+        <div><h2>Interior</h2></div>
+        <div><h2>Interior</h2></div>
+    </div>
+    </div>
+    <p> senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egesltricies mi vitae est. Mauris</p>
+    <p>tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenet. Mauris placerat eleifend </p>
+        <p>Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p><p>morbi tristique senectus et netus et malesuada fames ac turpis egestas.ricies eget, .</p>
+        <p>malesuada fames ac turpis egestas. Vestibulum torcerat</p>
+    <p>Pellentesque habitant morbi tristique senectusec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+    
+        
+    <div class="heading-3d-wrapper">	
+    <div class="heading-3d">
+        <div><h2>Handling</h2></div>
+        <div><h2>Handling</h2></div>
+        <div><h2>Handling</h2></div>
+    </div>
+    </div>
+    <p>tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+    <p>Vestibulum tortor quam, morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+    
+    
+    <div class="heading-3d-wrapper">
+        <div class="heading-3d">
+        <div><h2>Summary</h2></div>
+        <div><h2>Summary</h2></div>
+        <div><h2>Summary</h2></div>
+    </div>
+    </div>
+        <p>Tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+        <p>malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script>
+        //Bu derste bir önceki oluşturduğumuz tek bir title animasyonumuzu çoklu bir şekilde oluşturacağız
+
+        const trigger = gsap.utils.toArray(".heading-3d-wrapper")
+
+        trigger.forEach((trigger, index) => {
+            let target = trigger.querySelector(".heading-3d")
+            gsap.set(target, {transformPerspective:800, rotationX: -90})
+            ScrollTrigger.create({
+                trigger: trigger,
+                start: "top 80%",
+                end: "top 10%",
+                markers:true,
+                onEnter:()=> gsap.to(target, {rotationX:0}),
+                onLeave:()=> gsap.to(target, {rotationX:90}),
+                onEnterBack:()=> gsap.to(target, {rotationX:0}),
+                onLeaveBack:()=> gsap.to(target, {rotationX:-90})
+            })
+        });
+    </script>
+</body>
+</html>
